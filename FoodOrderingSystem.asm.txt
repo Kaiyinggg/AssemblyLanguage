@@ -1,0 +1,4742 @@
+.MODEL SMALL
+.STACK 100
+.DATA
+
+;---BANNER---
+des1 DB "       ********  **     **  *******  *******   ********  **       ** $"
+des2 DB "      //        **     **  //       //        //          **    **    $"
+des3 DB "     //        **     **  //       //        //            ** **     $"
+des4 DB "    //        *********  *******  *******   *******         **   $"
+des5 DB "   //        **     **  //            //        //         **      $"
+des6 DB "  //        **     **  //            //        //         **    $"
+des7 DB " ********  **     **  *******  *******   *******         **       $"
+
+;----LOGIN MENU---
+base DB "+++++++++++++ Login Menu +++++++++++++ $"
+option DB 13,10, " --------------------------- "
+DB 13,10, "|           0.Exit           |"
+DB 13,10, "|           1.Login          |"
+DB 13,10, " --------------------------- $"
+
+;---MAIN MENU---
+menu DB 13,10, "============================================="
+DB 13,10, "|                  Main Menu                 |"
+DB 13,10, "=============================================$"
+
+module2 DB 13,10, "*********************************************"
+DB 13,10, "*********************************************"
+DB 13,10, "**           0. Exits                      **"
+DB 13,10, "**           1. Registration               **"
+DB 13,10, "**           2. Delete Account             **"
+DB 13,10, "**           3. Food & Beverage Order      **"
+DB 13,10, "**           4. Inventory Management       **"
+DB 13,10, "**           5. Print Receipt              **"
+DB 13,10, "*********************************************"
+DB 13,10, "*********************************************$"
+
+module DB "=============== STAFF LOGIN =============== $"
+mod2 DB "=============== STAFF REGISTRATION ===============$"
+mod3 DB "=============== DELETE ACCOUNT =============== $"
+mod4 DB  "=============== FOOD & BEVERAGE ORDER =============== $"
+mod5 DB "=============== INVENTORY MANAGEMENT =============== $"
+mod6 DB  "=================== PAYMENT RECEIPT =================== $"
+
+loginStr DB 13,10,"Do you want to continue? (Y/N): $"
+loginStr2 DB 13,10,"Please enter the username: $"
+loginStr3 DB 13,10,"Please enter the password: $"
+loginStr4 DB 13,10,"Please enter your selection: $"
+loginStr5 DB 13,10,"Exit(Y/N): $"
+
+loginStr6 DB 13,10,"The available account registration left: $"
+loginStr7 DB 13,10,"The registration is full!!$"
+loginStr8 DB 13,10,"Solution: Delete the existing account!$"
+loginStr9 DB 13,10,"Completed! The account have been created.$"
+
+loginStr10 DB 13,10,"The account exist: $"
+loginStr11 DB 13,10,"The last user cannot be remove! $"
+loginStr12 DB 13,10,"Solution: You can register new account now!$"
+loginStr13 DB 13,10,"Proceed to delete(Y/N): $"
+loginStr14 DB 13,10,"Successfully Deleted!$"
+
+loginDet DB 13,10,"The input is incorrect!$"
+loginDet2 DB 13,10,"Please enter Y or N! $"
+loginDet3 DB 13,10,"The username is incorrect!$"
+loginDet4 DB 13,10,"The password is incorrect!$"
+loginDet5 DB 13,10,"No input is typed!! $"
+loginDet6 DB 13,10,"The username has been taken! $"
+loginDet7 DB 13,10,"The user does not exist! $$"
+
+verifiedLogin DB 13,10,"The username is been verified!!$"
+verifiedLogin2 DB 13,10,"The access have been approved!$"
+
+welcome DB 13,10,"Welcome to the Cheesy Restaurant Staff Management System !$"
+GOBACK DB 13,10,"Would you like to go back to main menu(Y/N):$"
+
+;---MENU---
+F1 DB 13,10,"   Item			Price		Quantity$"
+F2 DB 13,10,"--------------------------------------------------------$"
+F3 DB 13,10,"   1.Chicken Chop	RM15		$"
+F4 DB 13,10,"   2.Fried Rice		RM11		$"
+F5 DB 13,10,"   3.Burger		RM12		$"
+F6 DB 13,10,"   4.Coke		RM7		$"
+F7 DB 13,10,"   5.Juice		RM8		$"
+F8 DB 13,10,"--------------------------------------------------------$"
+
+;---INVENTORY TABLE
+STRDIS1 DB 13,10,"     Item           Quantity Left$"
+STRDIS2 DB 13,10,"---------------------------------------------$"
+STRDIS3 DB 13,10,"  1. Chicken Chop         $"
+STRDIS4 DB 13,10,"  2. Fried Rice           $"
+STRDIS5 DB 13,10,"  3. Burger               $"
+STRDIS6 DB 13,10,"  4. Coke                 $"
+STRDIS7 DB 13,10,"  5. Juice                $"
+STRDIS8 DB 13,10,"---------------------------------------------$"
+
+;---VALIDATION
+STRINVALID DB 13,10,"Wronged input, Please try again$"
+STRZERO DB 13,10,"Please do not enter zero$"
+STRORDID DB 13,10,"This is the order ID:$"
+STROUTRAN DB 13,10,"Your input is out of range, please enter only 0-5 and try again$"
+
+;----RESTOCK
+STRRE1 DB 13,10,"Enter the product number that you wish to restock(1-5): $"
+STRRE2 DB 13,10,"Would you like to continue restock(Y/N): $"
+STRRE3 DB 13,10,"Sorry, we dont have sufficient stock$"
+
+;----ORDER
+STROR1 DB 13,10,"Enter the product number(1-5): $"
+STROR2 DB "Enter the quantity(XX): $"
+STROR3 DB "Would you like to continue order(Y/N): $"
+STROR4 DB 13,10,"This is the order ID: $"
+STROR5 DB 13,10,"Thanks for ordering$"
+STROR6 DB 13,10,"Member Status(Y/N): $" 
+STROR7 DB 13,10,"New Customer(Y/N): $"
+
+;-----INVENTORY
+LQF1 DB 13,10,"Chicken Chop Left: $"
+LQF2 DB 13,10,"Fried Rice Left: $"
+LQF3 DB 13,10,"Burger Left: $"
+LQF4 DB 13,10,"Coke Left: $"
+LQF5 DB 13,10,"Juice Left: $"
+
+;-----RECEIPT TABLE  
+RCPTB1 DB 13,10,"       ITEM         PRICE(RM)    QUANTITY   AMOUNT(RM)$"
+RCPTB2 DB 13,10,"-------------------------------------------------------$"
+RCPTB3 DB 13,10,"    CHICKEN CHOP 	15        $"
+RCPTB4 DB 13,10,"     FRIED RICE		11        $"
+RCPTB5 DB 13,10,"      BURGER		12        $"
+RCPTB6 DB 13,10,"       COKE     	7         $"
+RCPTB7 DB 13,10,"      JUICE		8         $"
+RCPTB8 DB 13,10,"-------------------------------------------------------$"
+RCPTB9 DB 13,10,"                            TOTAL COST(RM):   $"
+RCPTB10 DB 13,10,"                            DISCOUNT (10%): - $"
+RCPTB11 DB 13,10,"                            SUB-TOTAL     :   $"
+RCPTB12 DB 13,10,"                            TAX (6%)      :   $"
+RCPTB13 DB 13,10,"                                           ============$"
+RCPTB14 DB 13,10,"                            TOTAL PAYMENT :   $"
+RCPTB15 DB "       $"
+
+;-----RECEIPT                              
+RCP1 DB "PLEASE ENTER ORDER ID: $"
+RCP2 DB "THE ORDER ID HAVE BEEN APPROVED!$"
+RCP3 DB "WRONG ORDER ID ENTERED ! $"   
+
+ENTERID DB 30 DUP("$")
+PRICE DW 0  
+ONE DW 1
+TSIX DW 6
+POINT DB ".$"
+TEMP DW 0
+TEMP2 DW 0  
+TEMP3 DW 0
+TTL DW 0
+TTL2 DW 0      
+FNL DB 0,0,0,0,0,0
+AMOUNT1 DW 0
+AMOUNT2 DW 0
+AMOUNT3 DW 0
+AMOUNT4 DW 0
+AMOUNT5 DW 0
+
+OQ1 DW 0
+OQ2 DW 0
+OQ3 DW 0
+OQ4 DW 0
+OQ5 DW 0
+STATUS DB 0
+FOOD DB 0
+RES DB 0
+R DB 5 DUP("0")
+RAND DB 4 DUP("0")
+Q DB 0,80,75,62,90,76
+A1 DB 0
+A2 DB 0
+A3 DB 0
+TEN DW 10
+TENB DB 10
+HUN DB 100
+QT1 DB 0
+QT2 DB 0
+loginInput DB 30 DUP("$")
+loginInput2 DB 30 DUP("$")
+loginInput3 DB 30 DUP("$")
+acc DB "ben$", 30 DUP("$")
+acc2 db 30 DUP("$")
+acc3 db 30 DUP("$")
+acc4 db 30 DUP("$")
+pw DB "123$", 30 DUP("$")
+pw2 DB 30 DUP("$")
+pw3 DB 30 DUP("$")
+pw4 DB 30 DUP("$")
+limit DB 0
+l1  DB 0
+l2  DB 0
+l3  DB 0
+l4  DB 0
+count DW 0
+
+exitDet DB 13,10,"Thank you for using the system! $"
+newline DB 13,10,"$"
+
+C DB 5 DUP ("0")
+P DB 15,11,12,7,8
+
+.CODE
+MAIN PROC
+MOV AX,@DATA
+MOV DS,AX
+
+logMenu:
+;newline
+;clear the screen
+mov ah,06h
+mov bh,07h
+mov cx,0000h
+mov dx,184Fh
+int 10h
+;set cursor
+mov ah,02h
+mov bh,00
+mov dx,0000
+int 10h
+;print design
+LEA dx,des1
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print design
+LEA dx,des2
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print design
+LEA dx,des3
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print design
+LEA dx,des4
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print design
+LEA dx,des5
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print design
+LEA dx,des6
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print design
+LEA dx,des7
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+
+;--------------------------------------
+;Login Main Menu
+;--------------------------------------
+
+;display option
+LEA dx,base
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display option(exit)
+LEA dx,option
+mov ah,9h
+int 21h
+
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display selection
+LEA dx,loginStr4
+mov ah,9h
+int 21h
+
+;write option and compare
+mov ah,1h
+int 21h
+CMP al,30h ;0
+je bufferExit
+CMP al,31h ;1
+je c1
+jne error
+
+logMenuBuffer3:
+jmp logMenu
+
+error:
+;display error
+LEA dx,loginDet
+mov ah,9h
+int 21h
+;let user see the loginDet
+mov ah,7h
+int 21h
+jmp logMenu
+
+;---------------------------------
+;Login Module
+;---------------------------------
+
+c1:
+;clear the screen
+mov ah,06h
+mov bh,07h
+mov cx,0000h
+mov dx,184Fh
+int 10h
+;set cursor
+mov ah,02h
+mov bh,00
+mov dx,0000
+int 10h
+;print Login
+LEA dx,module
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;jump login
+jmp address
+
+c2:
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print(want to proceed?)
+LEA dx, loginStr
+mov ah,9h
+int 21h
+;write loginInput(Y/N) and compare
+mov ah,1h
+int 21h
+CMP al,59h  ;Y
+je c1
+CMP al,79h  ;y
+je c1
+CMP al,4Eh  ;N
+je logMenuBuffer3
+CMP al,6Eh  ;n
+je logMenuBuffer3
+jne erroryn
+
+bufferExit:
+jmp bufferExit2
+
+erroryn:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display option(error(Y/N))
+LEA dx,loginDet2
+mov ah,9h
+int 21h
+;let user read
+mov ah,7h
+int 21h
+jmp c2
+
+address:
+;clear the screen
+mov ah,06h
+mov bh,07h
+mov cx,0000h
+mov dx,184Fh
+int 10h
+;set cursor
+mov ah,02h
+mov bh,00
+mov dx,0000
+int 10h
+;print Login
+LEA dx,module
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print(Please enter...)
+LEA dx,loginStr2
+mov ah,9h
+int 21h
+;address the loginInput
+LEA SI,loginInput
+
+enter:
+;write username
+mov ah,1h
+int 21h
+CMP al,08h
+JE turn
+CMP al,13
+JE change
+mov [si],al
+inc si
+jmp enter
+
+turn:
+dec si
+jmp enter
+
+change:
+mov bl, 24h
+mov [si], bl
+mov l1, 0
+mov l2, 0
+mov l3, 0
+mov l4, 0
+mov si, 0
+
+;compare account username
+mov al, loginInput[si]
+cmp al, 24h     ;Jm
+je bufferNologinInput
+cmp al,acc[si]  ;Ja
+je aa1
+cmp al,acc2[si] ;Jn
+je aa2
+cmp al,acc3[si]
+je aa3
+cmp al,acc4[si]
+je bufferN4
+jne errorBuff2
+
+q2:
+mov si,0
+dec si
+mov l1,0
+jmp aa2
+
+bufferN4:
+jmp aa4
+
+q3:
+mov si,0
+dec si
+mov l2,0
+jmp aa3
+
+q4:
+mov si,0
+dec si
+mov l3,0
+jmp aa4
+
+aa1:
+inc si
+inc l1
+mov al, loginInput[si]
+cmp al, acc[si]
+je p1
+jne q2
+
+bufferNologinInput:
+jmp nologinInput
+
+p1:
+;compare sign $
+mov al,loginInput[si]
+cmp al, 24h
+je bufferDisplay
+jne aa1
+
+aa2:
+inc si
+inc l2
+mov al, loginInput[si]
+cmp al,acc2[si]
+je p2
+jne q3
+
+bufferExit2:
+jmp exit
+
+p2:
+;compare sign $
+mov al,loginInput[si]
+cmp al, 24h
+je displayy
+jne aa2
+
+displayy:
+jmp display
+
+errorBuff2:
+jmp error2
+
+bufferDisplay:
+jmp display
+
+aa3:
+inc si
+inc l3
+mov al, loginInput[si]
+cmp al, acc3[si]
+je p3
+jne q4
+
+p3:
+;compare sign $
+mov al,loginInput[si]
+cmp al, 24h
+je display
+jne aa3
+
+aa4:
+inc si
+inc l4
+mov al, loginInput[si]
+cmp al,acc4[si]
+je p4
+jne error2
+
+p4:
+;compare sign $
+mov al,loginInput[si]
+cmp al, 24h
+je display
+jne aa4
+
+nologinInput:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+LEA dx,newline
+mov ah,9h
+int 21h
+;display No loginInput
+LEA dx,loginDet5
+mov ah,9h
+int 21h
+;let user know
+mov ah,7h
+int 21h
+jmp c2
+
+error2:
+;display error
+LEA dx,loginDet3
+mov ah,9h
+int 21h
+;let user know where wrong
+mov ah,7h
+int 21h
+jmp c2
+
+display:
+;display the acount is verified
+LEA dx,verifiedLogin
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+
+;----------------------------------
+;password part
+;----------------------------------
+
+address2:
+;print(Please enter...)
+LEA dx,loginStr3
+mov ah,9h
+int 21h
+;address the loginInput2
+LEA SI,loginInput2
+
+enter2:
+;write password
+mov ah,7h
+int 21h
+CMP al,08h
+JE turn2
+CMP al,13
+JE change2
+mov [si],al
+mov dl,'*'
+mov ah,02h
+int 21h
+inc si
+jmp enter2
+
+turn2:
+dec si
+jmp enter2
+
+change2:
+mov bl, 24h
+mov [si], bl
+mov si, 0
+;compare if is empty or not
+cmp loginInput2[si], 24h
+je nologinInput2
+;compare the username status
+cmp l1, 1
+jge n5
+cmp l2, 1
+jge n6
+cmp l3, 1
+jge n7
+cmp l4, 1
+jge n8
+jne errorBuff3
+
+nologinInput2:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display No loginInput
+LEA dx,loginDet5
+mov ah,9h
+int 21h
+;let user read
+mov ah,7h
+int 21h
+jmp c2
+
+errorBuff3:
+jmp error3
+
+n5:
+inc si
+mov al, loginInput2[si]
+cmp al, pw[si]
+je p5
+jne error3
+
+p5:
+;compare sign $
+mov al,loginInput2[si]
+cmp al, 24h
+je bufferDisplay2
+jne n5
+
+n6:
+inc si
+mov al, loginInput2[si]
+cmp al, pw2[si]
+je p6
+jne error3
+
+logMenuBuffer2:
+jmp logMenu
+
+p6:
+;compare sign $
+mov al,loginInput2[si]
+cmp al, 24h
+je bufferDisplay2
+jne n6
+
+n7:
+inc si
+mov al, loginInput2[si]
+cmp al, pw3[si]
+je p7
+jne error3
+
+bufferDisplay2:
+jmp display2
+
+p7:
+;compare sign $
+mov al,loginInput2[si]
+cmp al, 24h
+je displayy2
+jne n7
+
+displayy2:
+jmp display2
+
+n8:
+inc si
+mov al, loginInput2[si]
+cmp al, pw4[si]
+je p8
+jne error3
+
+p8:
+;compare sign $
+mov al,loginInput2[si]
+cmp al, 24h
+je displayy2
+jne n8
+
+error3:
+;display password wrong
+LEA dx,loginDet4
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print(want to proceed?)
+LEA dx, loginStr
+mov ah,9h
+int 21h
+
+jmp errorr
+
+errorr:
+;write loginInput(Y/N) and compare
+mov ah,1h
+int 21h
+CMP al,59h  ;Y
+je buffer2LoginMenu2
+CMP al,79h  ;y
+je buffer2LoginMenu2
+CMP al,4EH  ;N
+je reset
+CMP al,6EH  ;n
+je reset
+jne err2
+
+buffer2LoginMenu2:
+jmp c1
+
+reset:
+;clear the screen
+mov ah,06h
+mov bh,07h
+mov cx,0000h
+mov dx,184Fh
+int 10h
+;set cursor
+mov ah,02h
+mov bh,00
+mov dx,0000
+int 10h
+jmp logMenu
+
+
+err2:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display option(error(Y/N))
+LEA dx,loginDet2
+mov ah,9h
+int 21h
+LEA dx,newline
+mov ah,9h
+int 21h
+;print(want to proceed?)
+LEA dx, loginStr
+mov ah,9h
+int 21h
+;let user read loginDet
+mov ah,7h
+int 21h
+jmp errorr
+
+display2:
+;display the account is verified
+LEA dx,verifiedLogin2
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display the welcome message
+LEA dx,welcome
+mov ah,9h
+int 21h
+;let user know 
+mov ah,07h
+int 21h
+jmp mainMenu
+
+;----------------------------------
+;Main menu
+;----------------------------------
+
+mainMenu:
+;set cursor
+mov ah,02h
+mov bh,00
+mov dx,0000
+int 10h
+;clear the screen and change colour
+mov ah,06h
+mov bh,70h
+mov cx,0000h
+mov dx,184Fh
+int 10h
+;clear the screen and change colour
+mov ah,06h
+mov bh,70h
+mov cx,0000h
+mov dx,184Fh
+int 10h
+
+;set cursor
+mov ah,02h
+mov bh,00
+mov dx,0000
+int 10h
+jmp mainMenu2
+
+mainMenu2:
+;display option
+LEA dx,menu
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display option(exit)
+LEA dx,module2
+mov ah,9h
+int 21h
+
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+
+tryagain:
+;display selection
+LEA dx,loginStr4
+mov ah,9h
+int 21h
+
+;write input(option) and compare
+mov ah,1h
+int 21h
+
+;newline
+;LEA dx,newline
+;mov ah,9h
+;int 21h
+
+CMP al,30h
+JL fault
+CMP al,36h
+JGE fault
+
+CMP al,30h
+je bufferLogMenu
+CMP al,31h
+je m1
+CMP al,32h
+je bufferM2
+;jne error10
+CMP al,33h
+je bufferorder
+CMP al,34h
+je bufferinventory
+CMP al,35h
+je BUFFERRECEIPT
+
+
+bufferLogMenu:
+jmp logMenuBuffer2
+
+bufferorder:
+call orderpage
+
+bufferinventory:
+jmp restock
+
+BUFFERRECEIPT:
+jmp PRINT_RECEIPT
+
+fault:
+MOV AH,09H
+LEA DX,STROUTRAN
+INT 21H
+
+JMP tryagain
+
+error10:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display error and go back (input error)
+LEA dx,loginDet
+mov ah,9h
+int 21h
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+jmp mainMenu
+
+bufferM2:
+jmp buffM2
+
+m1:
+
+;------------------------
+;Register Account
+;------------------------
+
+;clear the screen and change colour
+mov ah,06h
+mov bh,07h
+mov cx,0000h
+mov dx,184Fh
+int 10h
+;set cursor
+mov ah,02h
+mov bh,00
+mov dx,0000
+int 10h
+;print(Register)
+LEA dx,mod2
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+
+;reset the limit 
+mov limit, 0
+mov l1, 0
+mov l2, 0
+mov l3, 0
+mov l4, 0
+mov count, 0
+
+;See how many limit left
+mov si, 0
+cmp acc[si], 24h    ;$
+jne then
+
+;compare again $ while the si inc
+inc si
+cmp acc[si], 24h    ;$
+je more
+jne then
+
+more:
+inc l1
+inc limit
+
+then:
+;See how many limit left
+mov si, 0
+cmp acc2[si], 24h    ;$
+jne then2
+
+;compare again $ while the si inc
+inc si
+cmp acc2[si], 24h    ;$
+je more2
+jne then2
+
+more2:
+inc l2
+inc limit
+
+then2:
+;See how many limit left
+mov si, 0
+cmp acc3[si], 24h    ;$
+jne then3
+
+;compare again $ while the si inc
+inc si
+cmp acc3[si], 24h    ;$
+je more3
+jne then3
+
+more3:
+inc l3
+inc limit
+
+then3:
+;See how many limit left
+mov si, 0
+cmp acc4[si], 24h    ;$
+jne show
+
+;compare again $ while the si inc
+inc si
+cmp acc4[si], 24h    ;$
+je more4
+jne show
+
+more4:
+inc l4
+inc limit
+
+show:
+add limit,30h
+cmp limit, 30h
+je cancel
+jne sign
+
+mainBuff4:
+jmp mainMenu
+
+cancel:
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print(full registration)
+LEA dx,loginStr7
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print(Solution)
+LEA dx,loginStr8
+mov ah,9h
+int 21h
+;let user read the loginDet
+mov ah,7h
+int 21h
+jmp mainBuff4
+
+sign:
+;print(the limit left)
+LEA dx,loginStr6
+mov ah,9h
+int 21h
+;display current limit
+mov dl, limit
+mov ah, 2h
+int 21h
+jmp regist
+
+sign2:
+;print(want to proceed?)
+LEA dx, loginStr
+mov ah,9h
+int 21h
+;write loginInput(Y/N) and compare
+mov ah,1h
+int 21h
+CMP al,59h  ;Y
+je bufferm1
+CMP al,79h  ;y
+je bufferm1
+CMP al,4Eh  ;N
+je buffer2MainMenu
+CMP al,6Eh  ;n
+je buffer2MainMenu
+jne err3
+
+buffer2MainMenu:
+jmp mainMenu
+
+bufferm1:
+jmp m1
+
+err3:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display option(error(Y/N))
+LEA dx,loginDet2
+mov ah,9h
+int 21h
+;let user read
+mov ah,7h
+int 21h
+jmp sign2
+
+regist:
+
+;print(Please enter username)
+LEA dx,loginStr2
+mov ah,9h
+int 21h
+;compare the spaces
+cmp l1,1
+je  v1
+cmp l2,1
+je  v2
+cmp l3,1
+je  v3
+cmp l4,1
+je  v4
+
+v1:
+;address the loginInput
+LEA SI, acc
+LEA DI, pw
+;mov l1, 0
+jmp enter3
+v2:
+;address the loginInput
+LEA SI, acc2
+LEA DI, pw2
+;mov l3,0
+jmp enter3
+v3:
+;address the loginInput
+LEA SI, acc3
+LEA DI, pw3
+;mov l3, 0
+jmp enter3
+v4:
+;address the loginInput
+LEA SI, acc4
+LEA DI, pw4
+;mov l4, 0
+jmp enter3
+
+enter3:
+;write loginInput(username)
+mov ah,1h
+int 21h
+CMP al,08h
+JE turn3
+CMP al,13
+JE set
+mov [si],al
+inc si
+inc count
+jmp enter3
+
+buffM2:
+jmp m2
+
+turn3:
+dec si
+dec count
+jmp enter3
+
+set:
+;make space become $
+mov bl, 24h
+mov [si], bl
+;compare its only one word or more
+cmp count, 0
+je  set2
+jne taken
+
+set2:
+mov bl, 24h
+cmp [si], bl
+je error4
+jne taken
+
+error4:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display (no loginInput)
+LEA dx,loginDet5
+mov ah,9h
+int 21h
+;let user read
+mov ah,7h
+int 21h
+jmp sign2
+
+taken:
+;compare again see have repeat or not
+mov si,count
+inc si
+mov cx,0
+mov cx,count
+cmp l1,1
+je  com1
+cmp l2,1
+je  com2
+cmp l3,1
+je  com3
+cmp l4,1
+je  com4
+
+com1:
+dec si
+mov al, acc[si]
+cmp al,acc2[si]
+jne buffp
+cmp al,acc3[si]
+jne buffp
+cmp al,acc4[si]
+jne buffp
+loop com1
+loopz userr1
+
+com2:
+dec si
+mov al, acc2[si]
+cmp al,acc[si]
+loope com2
+jne buffp
+loopz userr2
+cmp al,acc3[si]
+loope com2
+jne buffp
+loopz userr2
+cmp al,acc4[si]
+loope com2
+jne buffp
+loopz userr2
+
+com3:
+dec si
+mov al, acc3[si]
+cmp al,acc2[si]
+loope com3
+jne buffp
+loopz userr3
+cmp al,acc[si]
+loope com3
+jne buffp
+loopz userr3
+cmp al,acc4[si]
+loope com3
+jne pass
+loopz userr3
+
+com4:
+dec si
+mov al, acc4[si]
+cmp al,acc3[si]
+loope com4
+jne pass
+loopz userr4
+cmp al,acc[si]
+loope com4
+jne pass
+loopz userr4
+cmp al,acc2[si]
+loope com4
+jne pass
+loopz userr4
+
+buffp:
+jmp pass
+
+userr1:
+mov acc[0],24h
+mov acc[1],24h
+jmp error5
+
+userr2:
+mov acc2[0],24h
+mov acc2[1],24h
+jmp error5
+
+userr3:
+mov acc3[0],24h
+mov acc3[1],24h
+jmp error5
+
+userr4:
+mov acc4[0],24h
+mov acc4[1],24h
+jmp error5
+
+error5:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display <username taken)
+LEA dx,loginDet6
+mov ah,9h
+int 21h
+;let user read
+mov ah,7h
+int 21h
+jmp m1
+
+pass:
+;reset the ooerd count
+mov count,0
+;print(Please enter password)
+LEA dx,loginStr3
+mov ah,9h
+int 21h
+
+enter4:
+;write loginInput(pw)
+mov ah,1h
+int 21h
+CMP al,08h
+JE turn4
+CMP al,13
+JE set3
+mov [di],al
+inc count
+inc di
+jmp enter4
+
+turn4:
+dec di
+dec count
+jmp enter4
+
+set3:
+;make space become $
+mov bl, 24h
+mov [di], bl
+;compare its only one word or more
+cmp count, 0
+je  set4
+jne conf
+
+set4:
+mov bl, 24h
+cmp [di], bl
+je error6
+jne conf
+
+error6:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display (no loginInput)
+LEA dx,loginDet5
+mov ah,9h
+int 21h
+;let user read
+mov ah,7h
+int 21h
+jmp pass
+
+conf:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print(completed)
+LEA dx,loginStr9
+mov ah,9h
+int 21h
+;let user see the loginDetails
+mov ah,7h
+int 21h
+jmp sign2
+
+m2:
+;--------------------------------------
+;Delete account
+;--------------------------------------
+
+;clear the screen and change colour
+mov ah,06h
+mov bh,07h
+mov cx,0000h
+mov dx,184Fh
+int 10h
+;set cursor
+mov ah,02h
+mov bh,00
+mov dx,0000
+int 10h
+;print Delete
+LEA dx,mod3
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+
+;reset the limit 
+mov limit, 4
+mov l1, 0
+mov l2, 0
+mov l3, 0
+mov l4, 0
+
+;know how many limit left
+mov si, 0
+cmp acc[si], 24h    ;$
+jne leftt
+
+;compare again $ when the si inc
+inc si
+cmp acc[si], 24h    ;$
+je moree
+jne leftt
+
+moree:
+inc l1
+dec limit
+
+leftt:
+;know how many limit left
+mov si, 0
+cmp acc2[si], 24h    ;$
+jne leftt2
+
+;compare again $ when the si inc
+inc si
+cmp acc2[si], 24h    ;$
+je moree2
+jne leftt2
+
+moree2:
+inc l2
+dec limit
+
+leftt2:
+;know how many limit left
+mov si, 0
+cmp acc3[si], 24h    ;$
+jne leftt3
+
+;compare again $ when the si inc
+inc si
+cmp acc3[si], 24h    ;$
+je moree3
+jne leftt3
+
+moree3:
+inc l3
+dec limit
+
+leftt3:
+;know how many limit left
+mov si, 0
+cmp acc4[si], 24h    ;$
+jne knowli
+
+;compare again $ when the si inc
+inc si
+cmp acc4[si], 24h    ;$
+je moree4
+jne knowli
+
+moree4:
+inc l4
+dec limit
+
+knowli:
+add limit,30h
+cmp limit, 31h
+je cancel2
+jne start
+
+cancel2:
+;print(lastuser cannot remove)
+LEA dx,loginStr11
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;print(Solution)
+LEA dx,loginStr12
+mov ah,9h
+int 21h
+;let user see the loginDetails
+mov ah,7h
+int 21h
+jmp mainBuff4
+
+mainBuff3:
+jmp mainBuff4
+
+start:
+;print(the no. of acc exist)
+LEA dx,loginStr10
+mov ah,9h
+int 21h
+;display current limit
+mov dl, limit
+mov ah, 2h
+int 21h
+
+;go to delete
+jmp del
+
+start2:
+;print(want to proceed?)
+LEA dx, loginStr
+mov ah,9h
+int 21h
+;write loginInput(Y/N) and compare
+mov ah,1h
+int 21h
+CMP al,59h  ;Y
+je m22
+CMP al,79h  ;y
+je m22
+CMP al,4EH  ;N
+je mainBuff3
+CMP al,6EH  ;n
+je mainBuff3
+jne err4
+
+m22:
+jmp m2
+
+err4:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display option(error(Y/N))
+LEA dx,loginDet2
+mov ah,9h
+int 21h
+;let user read
+mov ah,7h
+int 21h
+jmp start2
+
+del:
+;print(Please enter name)
+LEA dx,loginStr2
+mov ah,9h
+int 21h
+;address the loginInput
+LEA SI,loginInput
+
+renter3:
+;write loginInput(username)
+mov ah,1h
+int 21h
+CMP al,08h
+JE aturn3
+CMP al,13
+JE change3
+mov [si],al
+inc si
+jmp renter3
+
+aturn3:
+dec si
+jmp enter3
+
+change3:
+mov bl, 24h
+mov [si], bl
+mov l1, 0
+mov l2, 0
+mov l3, 0
+mov l4, 0
+mov si, 0
+
+;compare the account name
+mov al, loginInput[si]
+cmp al, 24h     ;Jm
+je bufferError7
+cmp al,acc[si]  ;Ja
+je nextr1
+cmp al,acc2[si] ;Jn
+je nextr2
+cmp al,acc3[si]
+je nextr3
+cmp al,acc4[si]
+je nextr4
+jne bufferError8
+
+dda2:
+mov si,0
+dec si
+mov l1,0
+jmp nextr2
+
+dda3:
+mov si,0
+dec si
+mov l2,0
+jmp nextr3
+
+dda4:
+mov si,0
+dec si
+mov l3,0
+jmp nextr4
+
+nextr1:
+inc si
+inc l1
+mov al, loginInput[si]
+cmp al, acc[si]
+je signc1
+jne dda2
+
+signc1:
+;compare $ sign
+mov al,loginInput[si]
+cmp al, 24h
+je bufferDisplay3
+jne nextr1
+
+nextr2:
+inc si
+inc l2
+mov al, loginInput[si]
+cmp al,acc2[si]
+je signc2
+jne dda3
+
+bufferError7:
+jmp error7
+bufferError8:
+jmp error8
+
+signc2:
+;compare $ sign
+mov al,loginInput[si]
+cmp al, 24h
+je display3
+jne nextr2
+
+nextr3:
+inc si
+inc l3
+mov al, loginInput[si]
+cmp al, acc3[si]
+je signc3
+jne dda4
+
+signc3:
+;compare $ sign
+mov al,loginInput[si]
+cmp al, 24h
+je display3
+jne nextr3
+
+nextr4:
+inc si
+inc l4
+mov al, loginInput[si]
+cmp al,acc4[si]
+je signc4
+jne error8
+
+bufferDisplay3:
+jmp display3
+
+signc4:
+;compare $ sign
+mov al,loginInput[si]
+cmp al, 24h
+je display3
+jne nextr4
+
+error7:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display (no loginInput)
+LEA dx,loginDet5
+mov ah,9h
+int 21h
+;let user read
+mov ah,7h
+int 21h
+jmp start2
+
+error8:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display (user cannot find)
+LEA dx,loginDet7
+mov ah,9h
+int 21h
+;let user read
+mov ah,7h
+int 21h
+jmp start2
+
+display3:
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display the account is verified
+LEA dx,verifiedLogin
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+
+;--------------------------------------------
+;password part
+;--------------------------------------------
+
+address4:
+;print(Please enter password)
+LEA dx,loginStr3
+mov ah,9h
+int 21h
+;address the loginInput2
+LEA SI,loginInput2
+
+renter4:
+;write loginInput(password)
+mov ah,7h
+int 21h
+CMP al,08h
+JE aturn4
+CMP al,13
+JE change4
+mov [si],al
+mov dl,'*'
+mov ah,02h
+int 21h
+inc si
+jmp renter4
+
+aturn4:
+dec si
+jmp enter4
+
+change4:
+mov bl, 24h
+mov [si], bl
+mov si, 0
+;compare if is empty or not
+cmp loginInput2[si], 24h
+je nologinInput3
+dec si
+;compare username status
+cmp l1, 1
+jge nextr5
+cmp l2, 1
+jge nextr6
+cmp l3, 1
+jge nextr7
+cmp l4, 1
+jge nextr8
+jne err8
+
+err8:
+jmp error8
+
+nologinInput3:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display (no loginInput)
+LEA dx,loginDet5
+mov ah,9h
+int 21h
+;let user read
+mov ah,7h
+int 21h
+jmp eer
+
+eer:
+jmp er
+
+nextr5:
+inc si
+mov al, loginInput2[si]
+cmp al, pw[si]
+je signc5
+jne bufferError9
+
+signc5:
+;compare $ sign
+mov al,loginInput2[si]
+cmp al, 24h
+je display4
+jne nextr5
+
+nextr6:
+inc si
+mov al, loginInput2[si]
+cmp al, pw2[si]
+je signc6
+jne err9
+
+err9:
+jmp error9
+
+signc6:
+;compare $ sign
+mov al,loginInput2[si]
+cmp al, 24h
+je display4
+jne nextr6
+
+nextr7:
+inc si
+mov al, loginInput2[si]
+cmp al, pw3[si]
+je signc7
+jne error9
+
+signc7:
+;compare $ sign
+mov al,loginInput2[si]
+cmp al, 24h
+je display4
+jne nextr7
+
+nextr8:
+inc si
+mov al, loginInput2[si]
+cmp al, pw4[si]
+je signc8
+jne error9
+
+signc8:
+;compare $ sign
+mov al,loginInput2[si]
+cmp al, 24h
+je display4
+jne nextr8
+
+bufferError9:
+jmp error9
+
+display4:
+;display the account is verified
+LEA dx,verifiedLogin2
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+jmp displayy4
+
+displayy4:
+;newline
+;display (want to delete?)
+LEA dx,loginStr13
+mov ah,9h
+int 21h
+;write loginInput(Y/N) and compare
+mov ah,1h
+int 21h
+CMP al,59h  ;Y
+je delBuff
+CMP al,79h  ;y
+je delBuff
+CMP al,4EH  ;N
+je mainBuff2
+CMP al,6EH  ;n
+je mainBuff2
+jne errr6
+
+errr6:
+jmp err6
+
+error9:
+;display password incorrect
+LEA dx,loginDet4
+mov ah,9h
+int 21h
+;newline
+LEA dx,newline
+mov ah,9h
+int 21h
+jmp er
+
+er:
+;print(want to proceed?)
+LEA dx, loginStr
+mov ah,9h
+int 21h
+;write loginInput(Y/N) and compare
+mov ah,1h
+int 21h
+CMP al,59h  ;Y
+je sta
+CMP al,79h  ;y
+je sta
+CMP al,4EH  ;N
+je mainBuff2
+CMP al,6EH  ;n
+je mainBuff2
+jne err5
+
+sta:
+;clear the screen and change colour
+mov ah,06h
+mov bh,07h
+mov cx,0000h
+mov dx,184Fh
+int 10h
+;set cursor
+mov ah,02h
+mov bh,00
+mov dx,0000
+int 10h
+jmp m2
+
+;buffer
+mainBuff2:
+jmp mainBuff3
+
+delBuff:
+jmp delete
+
+reset2:
+;clear the screen and change colour
+mov ah,06h
+mov bh,07h
+mov cx,0000h
+mov dx,184Fh
+int 10h
+;set the cursor
+mov ah,02h
+mov bh,00
+mov dx,0000
+int 10h
+jmp address4
+
+err5:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+LEA dx,newline
+mov ah,9h
+int 21h
+;display option(error(Y/N))
+LEA dx,loginDet2
+mov ah,9h
+int 21h
+;let user read the loginDetail
+mov ah,7h
+int 21h
+jmp er
+
+err6:
+;2 newline
+LEA dx,newline
+mov ah,9h
+int 21h
+;display option(error(Y/N))
+LEA dx,loginDet2
+mov ah,9h
+int 21h
+;let user read the loginDetail
+mov ah,7h
+int 21h
+jmp displayy4
+
+delete:
+;cmp all user
+cmp l1, 1
+jge user1
+cmp l2, 1
+jge user2
+cmp l3, 1
+jge user3
+cmp l4, 1
+jge user4
+
+user1:
+mov acc[0],24h
+mov acc[1],24h
+jmp confi
+
+user2:
+mov acc2[0],24h
+mov acc2[1],24h
+jmp confi
+
+user3:
+mov acc3[0],24h
+mov acc3[1],24h
+jmp confi
+
+user4:
+mov acc4[0],24h
+mov acc4[1],24h
+jmp confi
+
+confi:
+;display option(deleted)
+LEA dx,loginStr14
+mov ah,9h
+int 21h
+;let user read the loginDetail
+mov ah,7h
+int 21h
+jmp start2
+
+;bufferjump
+mainBuff:
+jmp mainBuff2
+
+exit:
+;display (thank you for using system)
+LEA dx,exitDet
+mov ah,9h
+int 21h
+;exit
+mov ah,4ch
+int 21h
+
+ret
+
+Main ENDP
+
+;---------------------------------------------------------------------
+orderpage PROC
+;clear the screen
+mov ax, 3
+int 10h
+
+;display banner
+MOV AH,09H
+LEA DX,mod4
+INT 21H
+
+;NEXT CUSTOMER OR PREVIOUS CUSTOMER      
+NEW_CUSTOMER:
+MOV AH,09H
+LEA DX,NEWLINE
+INT 21H
+     
+LEA DX,STROR7
+MOV AH,09H
+INT 21H
+
+MOV AH,01H
+INT 21H   
+
+CMP AL,59H  ;Y
+JE NEW
+CMP AL,79H  ;y
+JE NEW
+CMP AL,4EH  ;N
+JE PREV
+CMP AL,6EH  ;n
+JE PREV
+JNE CUST_ERROR
+
+CUST_ERROR:
+LEA DX,NEWLINE
+MOV AH,9H
+INT 21H
+
+LEA DX,LOGINDET2
+MOV AH,9H
+INT 21H
+
+MOV AH,7H
+INT 21H
+JMP NEW_CUSTOMER 
+
+NEW:
+MOV PRICE,0
+MOV OQ1,0 
+MOV OQ2,0
+MOV OQ3,0
+MOV OQ4,0
+MOV OQ5,0
+JMP CHECK_MEMBER
+
+PREV:
+JMP DISPLAY_MENU
+
+;CHECK THE CUSTOMER MEMBER'S STATUS
+CHECK_MEMBER:
+MOV AH,09H
+LEA DX,NEWLINE
+INT 21H
+     
+LEA DX,STROR6
+MOV AH,09H
+INT 21H
+
+MOV AH,01H
+INT 21H   
+
+CMP AL,59H  ;Y
+JE MEMBER
+CMP AL,79H  ;y
+JE MEMBER
+CMP AL,4EH  ;N
+JE NON_MEMBER
+CMP AL,6EH  ;n
+JE NON_MEMBER
+JNE MEMBER_ERROR
+
+MEMBER_ERROR:
+LEA DX,NEWLINE
+MOV AH,9H
+INT 21H
+
+LEA DX,LOGINDET2
+MOV AH,9H
+INT 21H
+
+MOV AH,7H
+INT 21H
+JMP CHECK_MEMBER 
+
+MEMBER:
+MOV STATUS,59H 
+JMP DISPLAY_MENU
+
+NON_MEMBER:
+MOV STATUS,4EH
+call DISPLAY_MENU
+
+;---------------------------
+DISPLAY_MENU:
+call display_mainmenu
+
+
+;generate random number
+call ORDERID
+MOV RAND[0],DL
+call ORDERID
+MOV RAND[1],DL             
+        
+;prompt user to enter product number
+ORDERAGAIN:
+;DISPLAY STRING
+MOV AH,09H
+LEA DX,STROR1
+INT 21H
+
+;user input for food
+MOV AH,01H
+INT 21H
+MOV FOOD,AL
+MOV AX,0
+
+;validate to ensure the input not out of range
+CMP FOOD,30H
+JLE FOODINVALID
+CMP FOOD,36H
+JGE FOODINVALID
+
+QUANTITY:
+;display newline
+MOV AH,09H
+LEA DX,newline
+INT 21H
+
+;prompt the user to enter quantity
+MOV AH,09H
+LEA DX,STROR2
+INT 21H
+
+;input of quantity
+MOV AH, 01H
+INT 21H
+
+CMP AL,30H
+JL QUANTITYINVALID
+CMP AL,39H
+JG QUANTITYINVALID
+
+MOV QT1,AL
+SUB QT1,30H
+
+MOV AH, 01H
+INT 21H
+
+CMP AL,30H
+JL QUANTITYINVALID
+CMP AL,39H
+JG QUANTITYINVALID
+
+MOV QT2,AL
+SUB QT2,30H
+
+MOV AL,QT1
+MUL TEN
+ADD AL,QT2
+
+MOV C[0],AL
+
+;generate random number
+call ORDERID
+MOV RAND[2],DL
+call ORDERID
+MOV RAND[3],DL
+
+;to see which product the user choose
+CMP FOOD,31H
+JE MF1
+CMP FOOD,32H
+JE MF2
+CMP FOOD,33H
+JE MF3
+CMP FOOD,34H
+JE MF4
+CMP FOOD,35H
+JE MF5
+FOODINVALID:
+MOV AH,09H
+LEA DX,STRINVALID
+INT 21H
+JMP ORDERAGAIN 
+
+QUANTITYINVALID:
+MOV AH,09H
+LEA DX,STRINVALID
+INT 21H
+JMP QUANTITY 
+
+MF2:
+JMP MM2
+MF3:
+JMP MM3
+MF4:
+JMP MM4
+MF5:
+JMP MM5
+
+;Product 1
+MF1:
+MOV AL,C[0]
+CMP AL,Q[1]
+JG OUTOFSTOCK1
+
+;ADD PRICE
+MOV AX,0   
+MOV AL,P[0]
+MUL C[0]
+ADD PRICE,AX
+
+;CHECK THE ORDER QUANTITY OF THE ITEM
+CMP OQ1,0
+JE NORMAL
+JG PLUS
+
+NORMAL:
+MOV AX,0
+MOV AL,C[0]
+MOV OQ1,AX  
+JMP CONT_SUB
+
+PLUS:
+MOV AX,0
+MOV AL,C[0]
+ADD OQ1,AX
+JMP CONT_SUB
+
+;subtraction
+CONT_SUB: 
+MOV AX,0
+MOV AL,Q[1]
+SUB AL,C[0]
+MOV Q[1],AL
+
+;display string
+MOV AH,09H
+LEA DX,LQF1
+INT 21H
+
+;calculation
+MOV AX,0
+MOV AL,Q[1]
+
+;divide ten
+DIV TENB
+
+MOV A2,AH
+MOV A1,AL
+ADD A1,30H
+ADD A2,30H
+
+;if the first digit is 0 swap it with space
+CMP A1,30H
+JE EXC1
+JNE RESUME1
+
+OUTOFSTOCK1:
+JMP OUTOFSTOCK
+
+EXC1:
+MOV AX,0
+MOV AL,20H
+XCHG A1,AL
+JMP RESUME1
+
+;display byte
+RESUME1:
+MOV AH,02H
+MOV DL,A1
+INT 21H
+
+MOV AH,02H
+MOV DL,A2
+INT 21H
+
+JMP CONTINUE
+
+;genertae random number
+call ORDERID
+MOV RAND[2],DL
+
+;Product 2
+MM2:
+MOV AL,C[0]
+CMP AL,Q[2]
+JG OUTOFSTOCK1
+
+;ADD PRICE 
+MOV AX,0   
+MOV AL,P[1]
+MUL C[0]
+ADD PRICE,AX
+
+;CHECK THE ORDER QUANTITY OF THE ITEM
+CMP OQ2,0
+JE NORMAL_1
+JG PLUS_1
+
+NORMAL_1:
+MOV AX,0
+MOV AL,C[0]
+MOV OQ2,AX  
+JMP CONT_SUB_1
+
+PLUS_1:
+MOV AX,0
+MOV AL,C[0]
+ADD OQ2,AX
+JMP CONT_SUB_1
+
+;subtraction
+CONT_SUB_1: 
+MOV AX,0
+MOV AL,Q[2]
+SUB AL,C[0]
+MOV Q[2],AL
+
+;display string
+MOV AH,09H
+LEA DX,LQF2
+INT 21H
+
+;calculation
+MOV AX,0
+MOV AL,Q[2]
+
+;divide ten
+DIV TENB
+
+MOV A2,AH
+ADD A2,30H
+MOV A1,AL
+ADD A1,30H
+
+;if the first digit is 0 swap it with space
+CMP A1,30H
+JE EXC2
+JNE RESUME2
+
+EXC2:
+MOV AX,0
+MOV AL,20H
+XCHG A1,AL
+JMP RESUME2
+
+;display byte
+RESUME2:
+MOV AH,02H
+MOV DL,A1
+INT 21H
+
+MOV AH,02H
+MOV DL,A2
+INT 21H
+
+JMP CONTINUE
+
+;Product 3
+MM3:
+MOV AL,C[0]
+CMP AL,Q[3]
+JG OUTOFSTOCK2
+ 
+;ADD PRICE 
+MOV AX,0   
+MOV AL,P[2]
+MUL C[0]
+ADD PRICE,AX
+
+;CHECK THE ORDER QUANTITY OF THE ITEM
+CMP OQ3,0
+JE NORMAL_2
+JG PLUS_2
+
+NORMAL_2:
+MOV AX,0
+MOV AL,C[0]
+MOV OQ3,AX  
+JMP CONT_SUB_2
+
+PLUS_2:
+MOV AX,0
+MOV AL,C[0]
+ADD OQ3,AX
+JMP CONT_SUB_2
+
+;subtraction
+CONT_SUB_2:
+MOV AX,0
+MOV AL,Q[3]
+SUB AL,C[0]
+MOV Q[3],AL
+
+;display string
+MOV AH,09H
+LEA DX,LQF3
+INT 21H
+
+;calculation
+MOV AX,0
+MOV AL,Q[3]
+
+;divide ten
+DIV TENB
+
+MOV A2,AH
+ADD A2,30H
+MOV A1,AL
+ADD A1,30H
+
+;if the first digit is 0 swap it with space
+CMP A1,30H
+JE EXC3
+JNE RESUME3
+
+OUTOFSTOCK2:
+JMP OUTOFSTOCK
+
+EXC3:
+MOV AX,0
+MOV AL,20H
+XCHG A1,AL
+JMP RESUME3
+
+;display byte
+RESUME3:
+MOV AH,02H
+MOV DL,A1
+INT 21H
+
+MOV AH,02H
+MOV DL,A2
+INT 21H
+
+JMP BUFFER
+
+BUFFER:
+JMP CONTINUE
+
+;Product4
+MM4:
+MOV AL,C[0]
+CMP AL,Q[4]
+JG OUTOFSTOCK2
+
+;ADD PRICE  
+MOV AX,0   
+MOV AL,P[3]
+MUL C[0]
+ADD PRICE,AX
+
+;CHECK THE ORDER QUANTITY OF THE ITEM           
+CMP OQ4,0
+JE NORMAL_3
+JG PLUS_3
+
+NORMAL_3:
+MOV AX,0
+MOV AL,C[0]
+MOV OQ4,AX  
+JMP CONT_SUB_3
+
+PLUS_3:
+MOV AX,0
+MOV AL,C[0]
+ADD OQ4,AX
+JMP CONT_SUB_3
+
+;subtraction
+CONT_SUB_3: 
+MOV AX,0
+MOV AL,Q[4]
+SUB AL,C[0]
+MOV Q[4],AL
+
+;display string
+MOV AH,09H
+LEA DX,LQF4
+INT 21H
+
+;calculation
+MOV AX,0
+MOV AL,Q[4]
+
+;divide ten
+DIV TENB
+
+MOV A2,AH
+ADD A2,30H
+MOV A1,AL
+ADD A1,30H
+
+;if the first digit is 0 swap it with space
+CMP A1,30H
+JE EXC4
+JNE RESUME4
+
+EXC4:
+MOV AX,0
+MOV AL,20H
+XCHG A1,AL
+JMP RESUME4
+
+RESUME4:
+;-DISPLAY BYTE
+MOV AH,02H
+MOV DL,A1
+INT 21H
+
+MOV AH,02H
+MOV DL,A2
+INT 21H
+
+JMP BUFFER
+
+;Product 5
+MM5:
+MOV AL,C[0]
+CMP AL,Q[5]
+JG OUTOFSTOCK3
+
+;ADD PRICE 
+MOV AX,0   
+MOV AL,P[4]
+MUL C[0]
+ADD PRICE,AX
+
+;CHECK THE ORDER QUANTITY OF THE ITEM
+CMP OQ5,0
+JE NORMAL_4
+JG PLUS_4
+
+NORMAL_4:
+MOV AX,0
+MOV AL,C[0]
+MOV OQ5,AX  
+JMP CONT_SUB_4
+
+PLUS_4:
+MOV AX,0
+MOV AL,C[0]
+ADD OQ5,AX
+JMP CONT_SUB_4
+
+;subtraction
+CONT_SUB_4:
+MOV AX,0
+MOV AL,Q[5]
+SUB AL,C[0]
+MOV Q[5],AL
+
+;display string
+MOV AH,09H
+LEA DX,LQF5
+INT 21H
+
+;calculation
+MOV AX,0
+MOV AL,Q[5]
+
+;divide ten
+DIV TENB
+
+MOV A2,AH
+ADD A2,30H
+MOV A1,AL
+ADD A1,30H
+
+;if the first digit is 0 swap it with space
+CMP A1,30H
+JE EXC5
+JNE RESUME5
+
+OUTOFSTOCK3:
+JMP OUTOFSTOCK
+
+EXC5:
+MOV AX,0
+MOV AL,20H
+XCHG A1,AL
+JMP RESUME5
+
+RESUME5:
+;-DISPLAY BYTE
+MOV AH,02H
+MOV DL,A1
+INT 21H
+
+MOV AH,02H
+MOV DL,A2
+INT 21H
+
+JMP BUFFER
+
+;to handle if the user want to continue order
+CONTINUE:
+;display newline
+MOV AH,09H
+LEA DX,newline
+INT 21H
+
+;display string
+MOV AH,09H
+LEA DX,STROR3
+INT 21H
+
+;input
+MOV AH,01H
+INT 21H
+
+CMP AL,59H
+JE ORDERAGAIN1
+CMP AL,79H
+JE ORDERAGAIN1
+CMP AL,4EH
+JE THANKS
+CMP AL,6EH
+JE THANKS
+JNE CONERROR
+
+;to handle if user input for quantity has exceeded the stock
+OUTOFSTOCK:
+MOV AH,09H
+LEA DX,STRRE3
+INT 21H
+
+JMP CONTINUE
+
+;if the user input out of Y or N
+CONERROR:
+MOV AH,09H
+LEA DX,LOGINDET2
+INT 21H
+
+JMP CONTINUE
+
+ORDERAGAIN1:
+JMP ORDERAGAIN
+
+;success order
+THANKS:
+MOV AH,09H
+LEA DX,newline
+INT 21H
+
+MOV AH,09H
+LEA DX,newline
+INT 21H
+
+;express gratitude
+MOV AH,09H
+LEA DX,STROR5
+INT 21H
+
+mov ah,07h
+int 21h
+
+;orderid
+MOV AH,09H
+LEA DX,STROR4
+INT 21H
+
+;display orderid
+MOV AH,02H
+MOV DL,RAND[0]
+INT 21H
+
+MOV AH,02H
+MOV DL,RAND[1]
+INT 21H
+
+MOV AH,02H
+MOV DL,RAND[2]
+INT 21H
+
+MOV AH,02H
+MOV DL,RAND[3]
+INT 21H
+
+mov ah,07h
+int 21h
+
+;display latest inventory
+call display_mainmenu
+
+;call newline
+MOV AH,09H
+LEA DX,newline
+INT 21H
+
+BACKMAINN:
+;ask if user want to go back main menu
+MOV AH,09H
+LEA DX,GOBACK
+INT 21H
+
+MOV AH,01H
+INT 21H
+
+CMP AL,59H
+JE MAINMENU1
+CMP AL,79H
+JE MAINMENU1
+CMP AL,4EH
+JE EXIT1
+CMP AL,6EH
+JE EXIT1
+JNE ERRORBACK
+
+ERRORBACK:
+MOV AH,09H
+LEA DX,LOGINDET2
+INT 21H
+
+JMP BACKMAINN
+
+EXIT1:
+JMP EXIT
+
+MAINMENU1:
+JMP MAINMENU
+
+RET
+
+orderpage endp
+
+;---------------------------------------------------------------------
+;restock page
+RESTOCK:
+;clear screen
+mov ax, 3
+int 10h
+
+;display banner
+MOV AH,09H
+LEA DX,mod5
+INT 21H
+
+;display inventory
+call display_mainmenu
+
+;handle restock
+REAGAIN:
+;display string
+MOV AH,09H
+LEA DX,STRRE1
+INT 21H
+
+;user input
+MOV AH,01H
+INT 21H
+MOV RES,AL
+MOV AX,0
+
+CMP RES,30H
+JLE RESINVALID
+CMP RES,36H
+JGE RESINVALID
+
+RESQUANTITY:
+;display newline
+MOV AH,09H
+LEA DX,newline
+INT 21H
+
+;prompt for quantity 
+MOV AH,09H
+LEA DX,STROR2
+INT 21H
+
+;input for quantity
+MOV AH, 01H
+INT 21H 
+
+CMP AL,30H
+JL RESQUANTITYINVALID
+CMP AL,39H
+JG RESQUANTITYINVALID
+
+MOV QT1,AL
+SUB QT1,30H
+
+MOV AH, 01H
+INT 21H
+
+CMP AL,30H
+JL RESQUANTITYINVALID
+CMP AL,39H
+JG RESQUANTITYINVALID
+
+MOV QT2,AL
+SUB QT2,30H
+
+;addition
+MOV AL,QT1
+MUL TEN
+ADD AL,QT2
+
+MOV R[0],AL
+
+CMP RES,31H
+JE RESTOCK1
+CMP RES,32H
+JE RESTOCK2
+CMP RES,33H
+JE RESTOCK3
+CMP RES,34H
+JE RESTOCK4
+CMP RES,35H
+JE RESTOCK5
+
+;user enter out of Y or N
+RESINVALID:
+MOV AH,09H
+LEA DX,STRINVALID
+INT 21H
+JMP REAGAIN  
+
+RESQUANTITYINVALID:
+MOV AH,09H
+LEA DX,STRINVALID
+INT 21H
+JMP RESQUANTITY
+
+;product 1
+RESTOCK1:
+;addition
+MOV AX,0
+MOV AL,Q[1]
+ADD AL,R[0]
+MOV Q[1],AL
+
+JMP RESTOCKAGAIN
+
+;product 2
+RESTOCK2:
+;addition
+MOV AX,0
+MOV AL,Q[2]
+ADD AL,R[0]
+MOV Q[2],AL
+
+JMP RESTOCKAGAIN
+
+;product 3
+RESTOCK3:
+;addition
+MOV AX,0
+MOV AL,Q[3]
+ADD AL,R[0]
+MOV Q[3],AL
+
+JMP RESTOCKAGAIN
+
+;prodict 4
+RESTOCK4:
+;addition
+MOV AX,0
+MOV AL,Q[4]
+ADD AL,R[0]
+MOV Q[4],AL
+
+JMP RESTOCKAGAIN
+
+;product 5
+RESTOCK5:
+;addition
+MOV AX,0
+MOV AL,Q[5]
+ADD AL,R[0]
+MOV Q[5],AL
+
+JMP RESTOCKAGAIN
+
+;handle continous order
+RESTOCKAGAIN:
+;display string
+MOV AH,09H
+LEA DX,STRRE2
+INT 21H
+
+;user input
+MOV AH, 01H
+INT 21H
+
+CMP AL,59H
+JE REAGAINN
+CMP AL,79H
+JE REAGAINN
+CMP AL,4EH
+JE STOPRES
+CMP AL,6EH
+JE STOPRES
+
+JNE wrong
+
+wrong:
+MOV AH,09H
+LEA DX,LOGINDET2
+INT 21H
+
+JMP RESTOCKAGAIN
+
+REAGAINN:
+JMP REAGAIN
+
+;user do not want to continue restock
+STOPRES:
+call display_mainmenu
+
+;display newline
+MOV AH,09H
+LEA DX,newline
+INT 21H
+
+GOMAIN:
+;ask if user want to go back main menu
+MOV AH,09H
+LEA DX,GOBACK
+INT 21H
+
+MOV AH,01H
+INT 21H
+
+CMP AL,59H
+JE MAINMENUU
+CMP AL,79H
+JE MAINMENUU
+CMP AL,4EH
+JE EXITT
+CMP AL,6EH
+JE EXITT
+
+JNE WRONGG
+
+WRONGG:
+MOV AH,09H
+LEA DX,LOGINDET2
+INT 21H
+
+JMP GOMAIN
+
+MAINMENUU:
+JMP MAINMENU
+
+EXITT:
+JMP EXIT
+
+;-----------------------------------------------------------------------
+display_mainmenu PROC
+;display newline
+MOV AH,09H
+LEA DX,newline
+INT 21H
+
+;display inventory
+MOV AH,09H
+LEA DX,F1
+INT 21H
+
+MOV AH,09H
+LEA DX,F2
+INT 21H
+
+MOV AH,09H
+LEA DX,F3
+INT 21H
+
+MOV AX,0
+MOV AL,Q[1]
+;divide hun   ;100/80 ;80 0
+DIV HUN
+
+MOV A1,AL
+MOV A2,AH
+MOV AL,A2
+
+MOV AX,0
+MOV AL,A2
+
+;divide ten
+DIV TENB
+
+MOV A2,AL
+MOV A3,AH
+
+ADD A1,30H
+ADD A3,30H
+ADD A2,30H
+
+;if the first digit is 0 swap it with space
+CMP A1,30H
+JE EXCH1
+JNE RESUMEE1
+
+EXCH1:
+MOV AX,0
+MOV AL,20H
+XCHG A1,AL
+JMP RESUMEE1
+
+RESUMEE1:
+;display byte
+MOV AH,02H
+MOV DL,A1
+INT 21H
+
+MOV AH,02H
+MOV DL,A2
+INT 21H
+
+MOV AH,02H
+MOV DL,A3
+INT 21H
+
+;display string
+MOV AH,09H
+LEA DX,F4
+INT 21H
+
+MOV AX,0
+MOV AL,Q[2]
+
+;divide hun   ;100/80 ;80 0
+DIV HUN
+
+MOV A1,AL
+MOV A2,AH
+MOV AL,A2
+
+MOV AX,0
+MOV AL,A2
+
+;divide ten
+DIV TENB
+
+MOV A2,AL
+MOV A3,AH
+
+ADD A1,30H
+ADD A3,30H
+ADD A2,30H
+
+;if the first digit is 0 swap it with space
+CMP A1,30H
+JE EXCH2
+JNE RESUMEE2
+
+EXCH2:
+MOV AX,0
+MOV AL,20H
+XCHG A1,AL
+JMP RESUMEE2
+
+;display byte
+RESUMEE2:
+MOV AH,02H
+MOV DL,A1
+INT 21H
+
+MOV AH,02H
+MOV DL,A2
+INT 21H
+
+MOV AH,02H
+MOV DL,A3
+INT 21H
+
+;display string
+MOV AH,09H
+LEA DX,F5
+INT 21H
+
+MOV AX,0
+MOV AL,Q[3]
+
+;divide hun   ;100/80 ;80 0
+DIV HUN
+
+MOV A1,AL
+MOV A2,AH
+MOV AL,A2
+
+MOV AX,0
+MOV AL,A2
+
+;divide ten
+DIV TENB
+
+MOV A2,AL
+MOV A3,AH
+
+ADD A1,30H
+ADD A3,30H
+ADD A2,30H
+
+;if the first digit is 0 swap it with space
+CMP A1,30H
+JE EXCH3
+JNE RESUMEE3
+
+EXCH3:
+MOV AX,0
+MOV AL,20H
+XCHG A1,AL
+JMP RESUMEE3
+
+RESUMEE3:
+;-DISPLAY BYTE
+MOV AH,02H
+MOV DL,A1
+INT 21H
+
+MOV AH,02H
+MOV DL,A2
+INT 21H
+
+MOV AH,02H
+MOV DL,A3
+INT 21H
+
+;display string
+MOV AH,09H
+LEA DX,F6
+INT 21H
+
+MOV AX,0
+MOV AL,Q[4]
+
+;divide hun  ;100/80 ;80 0
+DIV HUN
+
+MOV A1,AL
+MOV A2,AH
+MOV AL,A2
+
+MOV AX,0
+MOV AL,A2
+
+;divide ten
+DIV TENB
+
+MOV A2,AL
+MOV A3,AH
+
+ADD A1,30H
+ADD A3,30H
+ADD A2,30H
+
+;if the first digit is 0 swap it with space
+CMP A1,30H
+JE EXCH4
+JNE RESUMEE4
+
+EXCH4:
+MOV AX,0
+MOV AL,20H
+XCHG A1,AL
+JMP RESUMEE4
+
+;display byte
+RESUMEE4:
+MOV AH,02H
+MOV DL,A1
+INT 21H
+
+MOV AH,02H
+MOV DL,A2
+INT 21H
+
+MOV AH,02H
+MOV DL,A3
+INT 21H
+
+;display string
+MOV AH,09H
+LEA DX,F7
+INT 21H
+
+MOV AX,0
+MOV AL,Q[5]
+;divide hun  ;100/80 ;80 0
+DIV HUN
+
+MOV A1,AL
+MOV A2,AH
+MOV AL,A2
+
+MOV AX,0
+MOV AL,A2
+;divide ten
+DIV TENB
+
+MOV A2,AL
+MOV A3,AH
+
+ADD A1,30H
+ADD A3,30H
+ADD A2,30H
+
+;if the first digit is 0 swap it with space
+CMP A1,30H
+JE EXCH5
+JNE RESUMEE5
+
+EXCH5:
+MOV AX,0
+MOV AL,20H
+XCHG A1,AL
+JMP RESUMEE5
+
+;display byte
+RESUMEE5:
+MOV AH,02H
+MOV DL,A1
+INT 21H
+
+MOV AH,02H
+MOV DL,A2
+INT 21H
+
+MOV AH,02H
+MOV DL,A3
+INT 21H
+
+MOV AH,09H
+LEA DX,F8
+INT 21H
+
+RET
+
+display_mainmenu ENDP
+
+
+;---------------------------------------------------------------------
+;Random Number Generator
+ORDERID PROC     
+; generate a random number by using the system time
+mov AX,0000h
+mov BX,0000h
+mov CX,0000h
+mov DX,0000
+MOV AH, 00h 
+INT 1AH      
+
+mov  ax, dx
+xor  dx, dx
+mov  cx, 10
+div  cx       
+add  dl, '0'  
+RET
+
+ORDERID ENDP
+
+;---------------------------------------------------------------------
+PRINT_RECEIPT PROC
+;CLEAR THE SCREEN 
+MOV AH,06H
+MOV BH,07H
+MOV CX,0000H
+MOV DX,184FH
+INT 10H 
+
+;SET THE CURSOR       
+MOV AH,02H
+MOV BH,00
+MOV DX,0000
+INT 10H 
+
+ENTER_ID:
+MOV AH,09H
+LEA DX,NEWLINE
+INT 21H 
+
+MOV AH,09H
+LEA DX,NEWLINE
+INT 21H 
+
+;ASK USER TO ENTER ORDER ID
+MOV AH,09H
+LEA DX,RCP1
+INT 21H  
+
+;ADDRESS THE ENTERED ID
+LEA SI,ENTERID
+JMP CHECK_ID
+
+;READ THE ENTERED ID
+CHECK_ID:
+MOV AH,1H
+INT 21H    
+CMP AL, 08H
+JE CHECK_BACK        
+CMP AL,13
+JE RUN_ID_1 
+MOV [SI],AL
+INC SI
+JMP CHECK_ID
+
+;IF THERE IS ENTER "BACKSPACE"
+CHECK_BACK:
+DEC SI
+JMP CHECK_ID
+
+;IF THERE IS ENTER "ENTER"
+RUN_ID_1:    
+MOV BL,24H
+MOV [SI], BL
+CMP AL, 24H
+JE ID_ERROR       
+MOV SI, 0
+JMP RUN_ID_2
+
+;COMPARE ORDER ID WITH THE ENTERED ID
+RUN_ID_2:    
+LEA SI, ENTERID  
+MOV AL, [SI]
+CMP AL, RAND[0]
+JNE ID_ERROR 
+
+INC SI  
+MOV AL, [SI]
+CMP AL, RAND[1]
+JNE ID_ERROR  
+
+INC SI  
+MOV AL, [SI]         
+CMP AL, RAND[2]
+JNE ID_ERROR 
+
+INC SI  
+MOV AL, [SI]
+CMP AL, RAND[3]
+JNE ID_ERROR  
+
+INC SI  
+MOV AL, [SI]
+CMP AL, 24H
+JNE ID_ERROR 
+
+JE DISPLAY_RECEIPT
+
+;ENTER ERROR ORDER ID
+ID_ERROR:
+MOV AH,9H
+LEA DX,NEWLINE
+INT 21H   
+
+;DISPLAY ERROR MESSAGE AND GO BACK
+LEA DX,RCP3
+INT 21H  
+JMP CONT_YN   
+
+;ASK THE USER IF THEY WANT TO CONTINUE
+CONT_YN:        
+LEA DX, LOGINSTR
+MOV AH,9H
+INT 21H   
+
+;USER INPUT
+MOV AH,1H
+INT 21H  
+
+;COMPARE USER INPUT WITH (Y/N)
+CMP AL,59H  ;Y
+JE ENTER_ID_1
+CMP AL,79H  ;y
+JE ENTER_ID_1
+CMP AL,4EH  ;N
+JE MAINMENU_1
+CMP AL,6EH  ;n
+JE MAINMENU_1
+JNE ERROR_MESSAGE        
+
+ENTER_ID_1:
+JMP ENTER_ID
+
+MAINMENU_1:
+JMP MAINMENU
+        
+ERROR_MESSAGE:
+LEA DX,NEWLINE
+MOV AH,9H
+INT 21H   
+
+;PROMPT MESSAGE TO USER INPUT Y/N ONLY
+LEA DX,LOGINDET2
+MOV AH,9H
+INT 21H 
+
+;LET USER READ AND "ENTER"
+MOV AH,7H
+INT 21H
+JMP CONT_YN          
+
+DISPLAY_RECEIPT: 
+;CLEAR THE SCREEN 
+MOV AH,06H
+MOV BH,07H
+MOV CX,0000H
+MOV DX,184FH
+INT 10H 
+
+;SET THE CURSOR       
+MOV AH,02H
+MOV BH,00
+MOV DX,0000
+INT 10H                   
+
+;DISPLAY APPROVED MESSAGE
+MOV AH,9H
+LEA DX,RCP2
+INT 21H   
+
+MOV AH,9H
+LEA DX,NEWLINE
+INT 21H
+
+MOV AH,9H
+LEA DX,NEWLINE
+INT 21H 
+
+;DISPLAY BANNER
+MOV AH,9H
+LEA DX,MOD6
+INT 21H  
+
+MOV AH,9H
+LEA DX,NEWLINE
+INT 21H 
+
+;DISPLAY PAYMENT RECEIPT TABLE
+MOV AH,9H
+LEA DX,RCPTB1
+INT 21H  
+
+MOV AH,9H
+LEA DX,RCPTB2
+INT 21H 
+
+;CALCULATE AMOUNT OF EACH ITEM
+MOV AX,OQ1
+MUL P[0]
+MOV AMOUNT1,AX
+
+MOV AX,OQ2
+MUL P[1]
+MOV AMOUNT2,AX
+
+MOV AX,OQ3
+MUL P[2]
+MOV AMOUNT3,AX
+
+MOV AX,OQ4
+MUL P[3]
+MOV AMOUNT4,AX
+
+MOV AX,OQ5
+MUL P[4]
+MOV AMOUNT5,AX  
+
+;IF AMOUNT = 0, NO DISPLAY THE ITEM DETAIL
+NO_DISPLAY_1:
+CMP AMOUNT1,0
+JE NO_DISPLAY_2
+JNE ITEM_1 
+
+NO_DISPLAY_2:
+CMP AMOUNT2,0
+JE NO_DISPLAY_3
+JNE ITEM_2
+
+NO_DISPLAY_3:
+CMP AMOUNT3,0
+JE NO_DISPLAY_4
+JNE ITEM_3  
+
+NO_DISPLAY_4:
+CMP AMOUNT4,0
+JE NO_DISPLAY_5
+JNE ITEM_4 
+
+NO_DISPLAY_5:
+CMP AMOUNT5,0
+JNE ITEM_5
+JMP COST_DISPLAY
+
+ITEM_2:
+JMP ITEM_2_2  
+
+ITEM_3:
+JMP ITEM_3_3
+
+ITEM_4:
+JMP ITEM_4_4
+
+ITEM_5:
+JMP ITEM_5_5
+
+ITEM_1:
+MOV AH,9H
+LEA DX,RCPTB3
+INT 21H 
+
+;DISPLAY THE ORDER QUANTITY OF THE ITEM 1
+MOV AX,0
+MOV DX,0
+MOV AX,OQ1
+MOV BX,100
+DIV BX 
+MOV FNL[0],AL
+MOV FNL[2],DL
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[2]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+
+MOV CX,4
+MOV SI,0
+OQ_TO_DECIMAL:          
+ADD FNL[SI],30H
+INC SI
+LOOP OQ_TO_DECIMAL 
+
+MOV SI,0              
+MOV CX,3
+OQ_CHECK_ZERO: 
+CMP FNL[SI],30H
+JE CHANGE_TO_SPACE
+JNE DISPAY_ORDER_QUANTITY
+
+CHANGE_TO_SPACE:
+MOV FNL[SI],00 
+INC SI
+LOOP OQ_CHECK_ZERO
+JMP DISPAY_ORDER_QUANTITY 
+
+DISPAY_ORDER_QUANTITY:  
+MOV CX,4
+MOV SI,0 
+SHOW_OQ:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP SHOW_OQ 
+
+;DISPLAY THE AMOUNT OF THE ITEM 1
+MOV AX,0
+MOV DX,0  
+MOV AX,AMOUNT1
+MOV BX,100
+DIV BX
+MOV FNL[0],AL
+MOV FNL[2],DL
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[2]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+
+MOV FNL[4],0
+MOV FNL[5],0
+
+MOV CX,6
+MOV SI,0
+
+AMOUNT_TO_DECIMAL:          
+ADD FNL[SI],30H
+INC SI
+LOOP AMOUNT_TO_DECIMAL 
+
+MOV SI,0              
+MOV CX,3
+
+AMOUNT_CHECK_ZERO: 
+CMP FNL[SI],30H
+JE CHANGE_ZERO
+JNE DISPLAY_AMOUNT
+
+CHANGE_ZERO:
+MOV FNL[SI],00 
+INC SI
+LOOP AMOUNT_CHECK_ZERO
+JMP DISPLAY_AMOUNT
+
+AMOUNT_ADD_POINT:
+MOV AH,02H
+MOV DL,POINT
+INT 21H  
+JMP AMOUNT_SHOW  
+
+DISPLAY_AMOUNT:  
+MOV AH,09H
+LEA DX,RCPTB15
+INT 21H
+
+MOV CX,6
+MOV SI,0 
+
+AMOUNT_PNT:                  
+CMP SI,4
+JE AMOUNT_ADD_POINT 
+
+AMOUNT_SHOW:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP AMOUNT_PNT
+JMP NO_DISPLAY_2   
+
+ITEM_2_2:
+MOV AH,9H
+LEA DX,RCPTB4
+INT 21H 
+
+;DISPLAY THE ORDER QUANTITY OF THE ITEM 2
+MOV AX,0
+MOV DX,0
+MOV AX,OQ2
+MOV BX,100
+DIV BX 
+MOV FNL[0],AL
+MOV FNL[2],DL
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[2]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+
+MOV CX,4
+MOV SI,0
+OQ_TO_DECIMAL_1:          
+ADD FNL[SI],30H
+INC SI
+LOOP OQ_TO_DECIMAL_1 
+
+MOV SI,0              
+MOV CX,3
+OQ_CHECK_ZERO_1: 
+CMP FNL[SI],30H
+JE CHANGE_TO_SPACE_1
+JNE DISPAY_ORDER_QUANTITY_1
+
+CHANGE_TO_SPACE_1:
+MOV FNL[SI],00 
+INC SI
+LOOP OQ_CHECK_ZERO_1
+JMP DISPAY_ORDER_QUANTITY_1 
+
+DISPAY_ORDER_QUANTITY_1:  
+MOV CX,4
+MOV SI,0 
+SHOW_OQ_1:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP SHOW_OQ_1 
+
+;DISPLAY THE AMOUNT OF THE ITEM 2
+MOV AX,0
+MOV DX,0  
+MOV AX,AMOUNT2
+MOV BX,100
+DIV BX
+MOV FNL[0],AL
+MOV FNL[2],DL
+
+MOV AX,0
+MOV DX,0 
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[2]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+
+MOV FNL[4],0
+MOV FNL[5],0
+
+MOV CX,6
+MOV SI,0
+
+AMOUNT_TO_DECIMAL_1:          
+ADD FNL[SI],30H
+INC SI
+LOOP AMOUNT_TO_DECIMAL_1 
+
+MOV SI,0              
+MOV CX,3
+
+AMOUNT_CHECK_ZERO_1: 
+CMP FNL[SI],30H
+JE CHANGE_ZERO_1
+JNE DISPLAY_AMOUNT_1
+
+CHANGE_ZERO_1:
+MOV FNL[SI],00 
+INC SI
+LOOP AMOUNT_CHECK_ZERO_1
+JMP DISPLAY_AMOUNT_1
+
+AMOUNT_ADD_POINT_1:
+MOV AH,02H
+MOV DL,POINT
+INT 21H  
+JMP AMOUNT_SHOW_1  
+
+DISPLAY_AMOUNT_1:  
+MOV AH,09H
+LEA DX,RCPTB15
+INT 21H
+
+MOV CX,6
+MOV SI,0 
+
+AMOUNT_PNT_1:                  
+CMP SI,4
+JE AMOUNT_ADD_POINT_1 
+
+AMOUNT_SHOW_1:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP AMOUNT_PNT_1
+JMP NO_DISPLAY_3
+
+ITEM_3_3:
+MOV AH,9H
+LEA DX,RCPTB5
+INT 21H 
+
+;DISPLAY THE ORDER QUANTITY OF THE ITEM 3
+MOV AX,0
+MOV DX,0
+MOV AX,OQ3
+MOV BX,100
+DIV BX 
+MOV FNL[0],AL
+MOV FNL[2],DL
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[2]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+
+MOV CX,4
+MOV SI,0
+OQ_TO_DECIMAL_2:          
+ADD FNL[SI],30H
+INC SI
+LOOP OQ_TO_DECIMAL_2 
+
+MOV SI,0              
+MOV CX,3
+OQ_CHECK_ZERO_2: 
+CMP FNL[SI],30H
+JE CHANGE_TO_SPACE_2
+JNE DISPAY_ORDER_QUANTITY_2
+
+CHANGE_TO_SPACE_2:
+MOV FNL[SI],00 
+INC SI
+LOOP OQ_CHECK_ZERO_2
+JMP DISPAY_ORDER_QUANTITY_2 
+
+DISPAY_ORDER_QUANTITY_2:  
+MOV CX,4
+MOV SI,0 
+SHOW_OQ_2:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP SHOW_OQ_2 
+
+;DISPLAY THE AMOUNT OF THE ITEM 3
+MOV AX,0
+MOV DX,0  
+MOV AX,AMOUNT3
+MOV BX,100
+DIV BX
+MOV FNL[0],AL
+MOV FNL[2],DL
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[2]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+
+MOV FNL[4],0
+MOV FNL[5],0
+
+MOV CX,6
+MOV SI,0
+
+AMOUNT_TO_DECIMAL_2:          
+ADD FNL[SI],30H
+INC SI
+LOOP AMOUNT_TO_DECIMAL_2 
+
+MOV SI,0              
+MOV CX,3
+
+AMOUNT_CHECK_ZERO_2: 
+CMP FNL[SI],30H
+JE CHANGE_ZERO_2
+JNE DISPLAY_AMOUNT_2
+
+CHANGE_ZERO_2:
+MOV FNL[SI],00 
+INC SI
+LOOP AMOUNT_CHECK_ZERO_2
+JMP DISPLAY_AMOUNT_2
+
+AMOUNT_ADD_POINT_2:
+MOV AH,02H
+MOV DL,POINT
+INT 21H  
+JMP AMOUNT_SHOW_2  
+
+DISPLAY_AMOUNT_2:  
+MOV AH,09H
+LEA DX,RCPTB15
+INT 21H
+
+MOV CX,6
+MOV SI,0 
+
+AMOUNT_PNT_2:                  
+CMP SI,4
+JE AMOUNT_ADD_POINT_2 
+
+AMOUNT_SHOW_2:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP AMOUNT_PNT_2
+JMP NO_DISPLAY_4 
+
+ITEM_4_4:
+MOV AH,9H
+LEA DX,RCPTB6
+INT 21H 
+
+;DISPLAY THE ORDER QUANTITY OF THE ITEM 4
+MOV AX,0
+MOV DX,0
+MOV AX,OQ4
+MOV BX,100
+DIV BX 
+MOV FNL[0],AL
+MOV FNL[2],DL
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[2]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+
+MOV CX,4
+MOV SI,0
+OQ_TO_DECIMAL_3:          
+ADD FNL[SI],30H
+INC SI
+LOOP OQ_TO_DECIMAL_3 
+
+MOV SI,0              
+MOV CX,3
+OQ_CHECK_ZERO_3: 
+CMP FNL[SI],30H
+JE CHANGE_TO_SPACE_3
+JNE DISPAY_ORDER_QUANTITY_3
+
+CHANGE_TO_SPACE_3:
+MOV FNL[SI],00 
+INC SI
+LOOP OQ_CHECK_ZERO_3
+JMP DISPAY_ORDER_QUANTITY_3 
+
+DISPAY_ORDER_QUANTITY_3:  
+MOV CX,4
+MOV SI,0 
+SHOW_OQ_3:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP SHOW_OQ_3 
+
+;DISPLAY THE AMOUNT OF THE ITEM 4
+MOV AX,0
+MOV DX,0  
+MOV AX,AMOUNT4
+MOV BX,100
+DIV BX
+MOV FNL[0],AL
+MOV FNL[2],DL
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[2]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+
+MOV FNL[4],0
+MOV FNL[5],0
+
+MOV CX,6
+MOV SI,0
+
+AMOUNT_TO_DECIMAL_3:          
+ADD FNL[SI],30H
+INC SI
+LOOP AMOUNT_TO_DECIMAL_3 
+
+MOV SI,0              
+MOV CX,3
+
+AMOUNT_CHECK_ZERO_3: 
+CMP FNL[SI],30H
+JE CHANGE_ZERO_3
+JNE DISPLAY_AMOUNT_3
+
+CHANGE_ZERO_3:
+MOV FNL[SI],00 
+INC SI
+LOOP AMOUNT_CHECK_ZERO_3
+JMP DISPLAY_AMOUNT_3
+
+AMOUNT_ADD_POINT_3:
+MOV AH,02H
+MOV DL,POINT
+INT 21H  
+JMP AMOUNT_SHOW_3  
+
+DISPLAY_AMOUNT_3:  
+MOV AH,09H
+LEA DX,RCPTB15
+INT 21H
+
+MOV CX,6
+MOV SI,0 
+
+AMOUNT_PNT_3:                  
+CMP SI,4
+JE AMOUNT_ADD_POINT_3 
+
+AMOUNT_SHOW_3:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP AMOUNT_PNT_3
+JMP NO_DISPLAY_5 
+
+ITEM_5_5:
+MOV AH,9H
+LEA DX,RCPTB7
+INT 21H 
+
+;DISPLAY THE ORDER QUANTITY OF THE ITEM 5
+MOV AX,0
+MOV DX,0
+MOV AX,OQ5
+MOV BX,100
+DIV BX 
+MOV FNL[0],AL
+MOV FNL[2],DL
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[2]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+
+MOV CX,4
+MOV SI,0
+OQ_TO_DECIMAL_4:          
+ADD FNL[SI],30H
+INC SI
+LOOP OQ_TO_DECIMAL_4 
+
+MOV SI,0              
+MOV CX,3
+OQ_CHECK_ZERO_4: 
+CMP FNL[SI],30H
+JE CHANGE_TO_SPACE_4
+JNE DISPAY_ORDER_QUANTITY_4
+
+CHANGE_TO_SPACE_4:
+MOV FNL[SI],00 
+INC SI
+LOOP OQ_CHECK_ZERO_4
+JMP DISPAY_ORDER_QUANTITY_4 
+
+DISPAY_ORDER_QUANTITY_4:  
+MOV CX,4
+MOV SI,0 
+SHOW_OQ_4:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP SHOW_OQ_4 
+
+;DISPLAY THE AMOUNT OF THE ITEM 5
+MOV AX,0
+MOV DX,0  
+MOV AX,AMOUNT5
+MOV BX,100
+DIV BX
+MOV FNL[0],AL
+MOV FNL[2],DL
+
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+ 
+MOV AX,0
+MOV DX,0
+MOV AL,FNL[2]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+
+MOV FNL[4],0
+MOV FNL[5],0
+
+MOV CX,6
+MOV SI,0
+
+AMOUNT_TO_DECIMAL_4:          
+ADD FNL[SI],30H
+INC SI
+LOOP AMOUNT_TO_DECIMAL_4 
+
+MOV SI,0              
+MOV CX,3
+
+AMOUNT_CHECK_ZERO_4: 
+CMP FNL[SI],30H
+JE CHANGE_ZERO_4
+JNE DISPLAY_AMOUNT_4
+
+CHANGE_ZERO_4:
+MOV FNL[SI],00 
+INC SI
+LOOP AMOUNT_CHECK_ZERO_4
+JMP DISPLAY_AMOUNT_4
+
+AMOUNT_ADD_POINT_4:
+MOV AH,02H
+MOV DL,POINT
+INT 21H  
+JMP AMOUNT_SHOW_4  
+
+DISPLAY_AMOUNT_4:  
+MOV AH,09H
+LEA DX,RCPTB15
+INT 21H
+
+MOV CX,6
+MOV SI,0 
+
+AMOUNT_PNT_4:                  
+CMP SI,4
+JE AMOUNT_ADD_POINT_4 
+
+AMOUNT_SHOW_4:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP AMOUNT_PNT_4
+JMP COST_DISPLAY
+
+COST_DISPLAY:       
+MOV AH,9H
+LEA DX,RCPTB8
+INT 21H        
+       
+;DISPLAY TOTAL COST  
+MOV DX,0
+MOV AX,0
+MOV TEMP,0
+MOV TEMP2,0  
+MOV TEMP3,0
+MOV TTL,0
+MOV TTL2,0    
+
+MOV AX,PRICE
+MOV BX,100
+DIV BX
+
+MOV FNL[0],AL
+MOV FNL[1],DL
+
+MOV AL,FNL[1]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+
+MOV AX,0  
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH 
+MOV FNL[4],30H
+MOV FNL[5],30H
+
+MOV CX,4
+MOV SI,0
+
+TO_DECIMAL:          
+ADD FNL[SI],30H
+INC SI
+LOOP TO_DECIMAL 
+
+MOV SI,0
+
+CHECK_ZERO:
+CMP FNL[SI],30H
+JE ZERO_TO_SPACE
+JNE DISPLAY_COST
+
+ZERO_TO_SPACE:
+MOV FNL[SI],00 
+INC SI
+JMP CHECK_ZERO 
+
+ADDPOINT:
+MOV AH,02H
+MOV DL,POINT
+INT 21H  
+JMP SHOW_0
+
+DISPLAY_COST:  
+MOV AH,09H
+LEA DX,RCPTB9
+INT 21H
+
+MOV CX,6
+MOV SI,0 
+
+PNT:                  
+CMP SI,4
+JE ADDPOINT 
+
+SHOW_0:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP PNT
+
+;GET THE MEMBER STATUS OF USER
+CMP STATUS,59H
+JE DISCOUNT 
+JNE NO_DISCOUNT
+
+NO_DISCOUNT:
+MOV FNL[0],00 
+MOV FNL[1],00
+MOV FNL[2],00
+MOV FNL[3],30H
+MOV FNL[4],30H
+MOV FNL[5],30H
+JMP DISPLAY_DISCOUNT
+
+;CALCULATE DISCOUNT(10%)
+DISCOUNT: 
+MOV DX,0
+MOV AX,0 
+
+MOV AX,PRICE
+MOV BX,100
+DIV BX
+MOV TEMP2,DX 
+
+MUL TEN
+MOV TEMP,AX 
+
+MOV AX,TEMP2
+MUL TEN
+MOV BX,100
+DIV BX 
+MOV TEMP2,DX  
+
+ADD AX,TEMP
+MOV DX,0     
+MOV TEMP,AX       
+MOV BX,100
+DIV BX    
+MOV TEMP3,DX      
+
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+
+MOV AX,TEMP3
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+
+MOV AX,TEMP2
+DIV TENB
+MOV FNL[4],AL
+MOV FNL[5],AH    
+
+MOV CX,6
+MOV SI,0
+
+TO_DECIMAL_1:          
+ADD FNL[SI],30H
+INC SI
+LOOP TO_DECIMAL_1 
+
+MOV SI,0              
+MOV CX,3
+
+CHECK_ZERO_1: 
+CMP FNL[SI],30H
+JE ZERO_TO_SPACE_1
+JNE DISPLAY_DISCOUNT
+
+ZERO_TO_SPACE_1:
+MOV FNL[SI],00 
+INC SI
+LOOP CHECK_ZERO_1
+JMP DISPLAY_DISCOUNT
+
+ADDPOINT_1:
+MOV AH,02H
+MOV DL,POINT
+INT 21H  
+JMP SHOW_1  
+
+;DISPLAY_DISCOUNT
+DISPLAY_DISCOUNT:  
+MOV AH,09H
+LEA DX,RCPTB10
+INT 21H
+
+MOV CX,6
+MOV SI,0 
+
+PNT_1:                  
+CMP SI,4
+JE ADDPOINT_1 
+
+SHOW_1:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP PNT_1
+JMP SUBTOTAL
+
+;CALCULATE SUBTOTAL
+SUBTOTAL:
+MOV DX,0
+MOV AX,0
+MOV AX,PRICE  
+SUB AX,TEMP
+
+CMP TEMP2,0
+JG MINUS_ONE
+JLE CONT_SUBTOTAL
+
+;XXXX.00 - X.01 = XXX(X-1)
+MINUS_ONE:           
+SUB AX,ONE
+JMP CONT_SUBTOTAL
+
+CONT_SUBTOTAL:
+MOV TTL,AX    
+
+MOV BX,100
+DIV BX
+MOV FNL[0],AL
+MOV FNL[1],DL
+
+MOV AL,FNL[1]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH 
+
+MOV AX,0
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+
+CMP TEMP2,0
+JG CONT_MINUS_ONE
+JLE NO_MINUS_ONE
+
+;XXXX.00 - X.01 = XXX(X-1).99
+CONT_MINUS_ONE: 
+MOV BX,100
+SUB BX,TEMP2  
+MOV TTL2,BX    
+
+MOV AX,BX 
+DIV TENB
+MOV FNL[4],AL
+MOV FNL[5],AH  
+JMP CONVERT
+
+NO_MINUS_ONE:
+MOV FNL[4],0
+MOV FNL[5],0 
+JMP CONVERT
+
+CONVERT:
+MOV CX,6
+MOV SI,0
+
+TO_DECIMAL_2:          
+ADD FNL[SI],30H
+INC SI
+LOOP TO_DECIMAL_2 
+
+MOV SI,0
+
+CHECK_ZERO_2:
+CMP FNL[SI],30H
+JE ZERO_TO_SPACE_2
+JNE DISPLAY_SUBTOTAL
+
+ZERO_TO_SPACE_2:
+MOV FNL[SI],00 
+INC SI
+JMP CHECK_ZERO_2
+
+ADDPOINT_2:
+MOV AH,02H
+MOV DL,POINT
+INT 21H  
+JMP SHOW_2
+
+;DISPLAY SUBTOTAL
+DISPLAY_SUBTOTAL:  
+MOV AH,09H
+LEA DX,RCPTB11
+INT 21H
+
+MOV CX,6
+MOV SI,0 
+
+PNT_2:                  
+CMP SI,4
+JE ADDPOINT_2 
+
+SHOW_2:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP PNT_2
+
+JMP TAX
+
+;CALCULATE TAX(6%) 
+TAX:
+MOV DX,0
+MOV AX,0
+
+MOV AX,TTL  
+MOV BX,100
+DIV BX
+MOV TEMP2,DX 
+
+MUL TSIX
+MOV TEMP,AX   
+
+MOV AX,TEMP2
+MUL TSIX
+MOV BX,100
+DIV BX 
+MOV TEMP2,DX  
+
+ADD AX,TEMP
+MOV DX,0     
+MOV TEMP,AX      
+MOV BX,100
+DIV BX    
+MOV TEMP3,DX     
+
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH
+
+MOV AX,TEMP3
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH
+     
+MOV AX,TTL2            
+MUL TSIX 
+MOV BX,100
+DIV BX 
+ADD TEMP2,AX 
+
+CMP DX,50
+JGE PLUS_ONE 
+JL CONT_TAX   
+
+;XXXX.XX5 = XXXX.X(X+1)
+PLUS_ONE:  
+MOV AX,TEMP2
+ADD AX,ONE
+MOV TEMP2,AX 
+JMP CONT_TAX
+
+CONT_TAX:          
+MOV AX,TEMP2
+DIV TENB
+MOV FNL[4],AL
+MOV FNL[5],AH                   
+
+MOV CX,6
+MOV SI,0
+
+TO_DECIMAL_3:          
+ADD FNL[SI],30H
+INC SI
+LOOP TO_DECIMAL_3 
+
+MOV SI,0             
+MOV CX,3
+
+CHECK_ZERO_3: 
+CMP FNL[SI],30H
+JE ZERO_TO_SPACE_3
+JNE DISPLAY_TAX
+
+ZERO_TO_SPACE_3:
+MOV FNL[SI],00 
+INC SI
+LOOP CHECK_ZERO_3
+JMP DISPLAY_TAX
+
+ADDPOINT_3:
+MOV AH,02H
+MOV DL,POINT
+INT 21H  
+JMP SHOW_3
+
+;DISPLAY_TAX
+DISPLAY_TAX:  
+MOV AH,09H
+LEA DX,RCPTB12
+INT 21H
+
+MOV CX,6
+MOV SI,0 
+
+PNT_3:                   
+CMP SI,4
+JE ADDPOINT_3 
+
+SHOW_3:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP PNT_3
+JMP TOTAL_PAYMENT
+
+;CALCULATE TOTAL PAYMENT 
+TOTAL_PAYMENT:
+MOV DX,0
+MOV AX,0
+MOV AX,TEMP
+ADD TTL,AX   
+
+MOV AX,TEMP2       
+ADD TTL2,AX
+CMP TTL2,100     
+JGE TOTAL_PLUS_ONE
+JL CONT_TOTAL_PAYMENT
+
+;XXXX.60 + XXXX.60 = XXX(X+1)
+TOTAL_PLUS_ONE:
+MOV AX,ONE 
+ADD TTL,AX      
+JMP CONT_TOTAL_PAYMENT
+
+CONT_TOTAL_PAYMENT:
+MOV AX,TTL  
+MOV BX,100
+DIV BX
+MOV FNL[0],AL
+MOV FNL[1],DL
+
+MOV AL,FNL[1]
+DIV TENB
+MOV FNL[2],AL
+MOV FNL[3],AH 
+
+MOV AX,0
+MOV AL,FNL[0]
+DIV TENB
+MOV FNL[0],AL
+MOV FNL[1],AH  
+
+CMP TTL2,100     
+JGE CONT_TOTAL_PLUS_ONE
+JL NO_PLUS_ONE
+
+;XXXX.60 + XXXX.60 = XXX(X+1).20
+CONT_TOTAL_PLUS_ONE:       
+MOV BX,100
+SUB TTL2,BX 
+MOV AX,TTL2
+
+DIV TENB
+MOV FNL[4],AL
+MOV FNL[5],AH          
+JMP CONVERT_1 
+
+NO_PLUS_ONE:
+MOV AX,TTL2 
+DIV TENB
+MOV FNL[4],AL
+MOV FNL[5],AH 
+JMP CONVERT_1   
+
+CONVERT_1:
+MOV CX,6
+MOV SI,0
+
+TO_DECIMAL_4:        
+ADD FNL[SI],30H
+INC SI
+LOOP TO_DECIMAL_4 
+
+MOV SI,0
+
+CHECK_ZERO_4:
+CMP FNL[SI],30H
+JE ZERO_TO_SPACE_4
+JNE DISPLAY_TOTAL_PAYMENT
+
+ZERO_TO_SPACE_4:
+MOV FNL[SI],00 
+INC SI
+JMP CHECK_ZERO_4
+
+ADDPOINT_4:
+MOV AH,02H
+MOV DL,POINT
+INT 21H  
+JMP SHOW_4
+
+;DISPLAY TOTAL PAYMENT
+DISPLAY_TOTAL_PAYMENT:  
+MOV AH,09H
+LEA DX,RCPTB13
+INT 21H
+
+MOV AH,09H
+LEA DX,RCPTB14
+INT 21H
+
+MOV CX,6
+MOV SI,0 
+
+PNT_4:
+CMP SI,4
+JE ADDPOINT_4 
+
+SHOW_4:
+MOV AH,02H
+MOV DL,FNL[SI]
+INT 21H  
+INC SI
+LOOP PNT_4 
+
+MOV AH,09H
+LEA DX,RCPTB13
+INT 21H   
+
+MOV AH,07H
+INT 21H 
+JMP MAINMENU           
+
+RET
+PRINT_RECEIPT ENDP
+
+END MAIN
